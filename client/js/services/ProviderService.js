@@ -4,7 +4,7 @@ angular.module('ProviderService', []).factory('Provider', ['$http', function($ht
     return {
         // call to get all providers
         get : function() {
-            return $http.get('/api/providers');
+            return $http.get('/api');
         },
 
         // these will work when more API routes are defined on the Node side of things

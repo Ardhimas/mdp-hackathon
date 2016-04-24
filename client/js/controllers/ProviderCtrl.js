@@ -1,5 +1,5 @@
 // client/js/controllers/ProviderCtrl.js
-angular.module('ProviderCtrl', []).controller('ProviderController', function($scope) {
+/*global angular*/
+angular.module('ProviderCtrl', []).controller('ProviderController', function($scope, Provider) {
     $scope.tagline = 'Provider page!';
-
 });
