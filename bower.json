@@ -5,7 +5,10 @@
         "bootstrap": "latest",
         "font-awesome": "latest",
         "animate.css": "latest",
+        "jquery": "latest",
         "angular": "latest",
-        "angular-route": "latest"   
+        "angular-route": "latest",
+        "angular-ui-select": "latest",
+        "angular-sanitize": "latest"
     }
 }

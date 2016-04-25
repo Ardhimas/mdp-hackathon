@@ -82,8 +82,10 @@ function Connection(version, key, secret, practiceid) {
 	var _key = ''
 	var _secret = ''
 	var _token = ''
-	var _hostname = 'api.athenahealth.com'
-
+	// var _hostname = 'api.athenahealth.com'
+	
+	var _hostname = 'ardy-cors.herokuapp.com/' + 'api.athenahealth.com'
+	console.log(_hostname);
 	/**
 	 * The practice ID to use when sending requests.
 	 * @member {string|number} practiceid
@@ -120,15 +122,16 @@ function Connection(version, key, secret, practiceid) {
 		var path = path_join(auth_prefixes[_version], '/token')
 		var params = querystring.stringify({grant_type: 'client_credentials'})
 		var headers = {
-			'authorization': 'Basic ' + new Buffer(_key + ':' + _secret).toString('base64'),
-			'content-type': 'application/x-www-form-urlencoded',
-			'content-length': params.length,
+			'Authorization': 'Basic ' + new Buffer(_key + ':' + _secret).toString('base64'),
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Length': params.length,
 		}
 
 		// Make the request and propagate the events, storing the token for later
 		call(verb, path, params, headers, false)
 			.on('done', function(response) {
 				_token = response.access_token
+				console.log("storing token " +  _token);
 				emitter.emit('ready')
 			}).on('error', function(error) {
 				emitter.emit('error', error)
@@ -159,8 +162,9 @@ function Connection(version, key, secret, practiceid) {
 	var call = function(verb, path, body, headers, retry) {
 		var emitter = new events.EventEmitter
 		var output
-
+		console.log(_hostname);
 		var req = https.request({
+			// url: _hostname + path,
 			hostname: _hostname,
 			method: verb,
 			path: path,
@@ -214,44 +218,49 @@ function Connection(version, key, secret, practiceid) {
 
 		var new_path = path_join(_version, practiceid, path)
 		var new_body = querystring.stringify(body)
-		var new_headers = merge({
-			'authorization': 'Bearer ' + _token,
-			'content-length': new_body.length,
-		}, headers)
-
-		// This is a little hack to get authorized calls to retry when we get a 401 Not Authorized.
-		// Since this is Javascript, we can't wait for the second `call` in order to return. To
-		// achieve this, the emitter from `call` emits a '401' event only when its last argument
-		// (retry) is true. Then we need to re-auth (which itself returns an emitter), and when
-		// that's ready, we can try again. This time we tell `call` to ignore 401s (by telling it we
-		// won't retry). I think this can be done better with promises at some point, but that may
-		// require an external library or waiting until ECMA6 gets implemented by node.
-		call(verb, new_path, new_body, new_headers, true)
-			.on('401', function() {
-				authenticate()
-					.on('ready', function() {
-						// Since we can't just do this recursively (due to emitter returns), we have
-						// to re-set the auth header manually.
-						new_headers['authorization'] = 'Bearer ' + _token
-
-						call(verb, new_path, new_body, new_headers, false)
-							.on('done', function(response) {
-								emitter.emit('done', response)
-							})
-							.on('error', function(error) {
-								emitter.emit('error', error)
-							})
-					})
-			})
-			// These handlers will not execute if we get a 401, because `call` is set up that way.
-			.on('done', function(response) {
-				emitter.emit('done', response)
-			})
-			.on('error', function(error) {
-				emitter.emit('error', error)
-			})
-
-		return emitter
+		 //var wait = function(){
+				
+			var new_headers = merge({
+				'authorization': 'Bearer ' + _token,
+				'content-length': new_body.length,
+			}, headers)
+			console.log("after merge " + _token)
+	
+			// This is a little hack to get authorized calls to retry when we get a 401 Not Authorized.
+			// Since this is Javascript, we can't wait for the second `call` in order to return. To
+			// achieve this, the emitter from `call` emits a '401' event only when its last argument
+			// (retry) is true. Then we need to re-auth (which itself returns an emitter), and when
+			// that's ready, we can try again. This time we tell `call` to ignore 401s (by telling it we
+			// won't retry). I think this can be done better with promises at some point, but that may
+			// require an external library or waiting until ECMA6 gets implemented by node.
+			call(verb, new_path, new_body, new_headers, true)
+				.on('401', function() {
+					authenticate()
+						.on('ready', function() {
+							// Since we can't just do this recursively (due to emitter returns), we have
+							// to re-set the auth header manually.
+							new_headers['authorization'] = 'Bearer ' + _token
+	
+							call(verb, new_path, new_body, new_headers, false)
+								.on('done', function(response) {
+									emitter.emit('done', response)
+								})
+								.on('error', function(error) {
+									emitter.emit('error', error)
+								})
+						})
+				})
+				// These handlers will not execute if we get a 401, because `call` is set up that way.
+				.on('done', function(response) {
+					emitter.emit('done', response)
+				})
+				.on('error', function(error) {
+					emitter.emit('error', error)
+				})
+	
+			return emitter
+		 //}
+		 //setTimeout(wait,900);
 	}
 
 

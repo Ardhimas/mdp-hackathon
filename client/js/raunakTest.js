@@ -234,7 +234,7 @@ function main() {
         console.log(input)
         return input
     }
-    //getDepartments(tester)
+    getDepartments(tester)
     //getProviders(tester)
     //getDepartmentId(tester, 'Rome Office')
     //var provider = {firstname:"Clelia", lastname:"Duncan", specialty:"Family Medicine"};
@@ -246,5 +246,5 @@ function main() {
                     mobilephone: '512 888 2888', departmentid: 1 }
     //getPatientId(tester, patient)
     //createNewPatient(tester, patient)
-    bookAppointment(tester, 22616, 565, 664617)
+    //bookAppointment(tester, 22616, 565, 664617)
 }

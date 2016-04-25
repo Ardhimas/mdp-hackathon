@@ -1,6 +1,6 @@
 // client/js/services/ProviderService.js
-angular.module('ProviderService', []).factory('Provider', ['$http', function($http) {
-    
+// angular.module('ProviderService', []).factory('Provider', ['$http', function($http) {
+module.exports = function($http){
     return {
         // call to get all providers
         get : function() {
@@ -18,5 +18,5 @@ angular.module('ProviderService', []).factory('Provider', ['$http', function($ht
             return $http.delete('/api/providers/' + id);
         }
     }       
-
-}]);
+}
+// }]);

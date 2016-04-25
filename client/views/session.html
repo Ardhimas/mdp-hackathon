@@ -1,7 +1,73 @@
 <!-- client/views/session.html -->
 
-<div class="jumbotron text-center">
-    <h1>Sessions</h1>
+<div id="sess_style" class="jumbotron text-center" >
+    <p>{{ patient }}1</p>
+    <div id='session_main_screen'>
+        <div id='inline_sess'>
+            
+        <div id='session_sign_in' style="text-align: center;">
+            <br><br><br>
+            <span style='padding-top: 6vw; padding-bottom:'>
+            <br>
+            <a href='/'><img src="img/SSLOGO.png" alt="SSLogo" style='max-width: 35%; max-height: 35%;'></a>
+            
+            <br><br>
+            </span><br><br>
+            <div class="inner_sign" style='text-align: left;'>
+                <u>REGISTER YOUR SESSION</u>:<br><br>
+                <!--Select Patient-->
+                <form id="form_style" action="action_page.php">
+                <br>
+                <label>First Name:</label><br><br>
+                <input style='color: black; padding-left: .5vw;' type="text" name="firstname"><br><br>
+                
+                <label>Last Name:</label><br><br>
+                <input style='color: black; padding-left: .5vw;' type="text" name="lastname"><br><br>
+                
+                <label for="day">Date of Birth:</label><br><br>
+                <div id="date1" class="datefield">
+                    <input id="day" type="tel" maxlength="2" placeholder="DD"/> /              
+                    <input id="month" type="tel" maxlength="2" placeholder="MM"/>/
+                    <input id="year" type="tel" maxlength="4" placeholder="YYYY"/>
+                </div>
+                <br><br><br>
+                <input id='button' type="submit" value="Submit">
+                <br>
+                </form>
+            </div>
+        </div>
+        
+        <div id='session_screen'>
+            
+            <div id='session_display'>
+                
+                <div id='sess_title' style='font-size: 3vw;'>
+                    View Patient Sessions
+                </div>
+                <div id='sess_content' style='color:black;'>
+                    
+                    <!-- MAIN PORTION OF WEB APP -->
+                    <!-- MAIN PORTION OF WEB APP -->
+                    <!-- MAIN PORTION OF WEB APP -->
+                    <!-- MAIN PORTION OF WEB APP -->
+                    <!-- MAIN PORTION OF WEB APP --><br><br><br><br>
+                    <div id=transition_A ng-hide="isFirst('A')"> Name: John Doe </div>
+                    <div id=transition_B ng-hide="isFirst('B')"> Age: 30 </div><br><br>
+                    <div id=transition_C ng-hide="isFirst('C')"> Set Appointment with Dr.(First Name)(Last Name): </div>
+                    
+                    <input style='color: black; padding-left: .5vw;' type="text" name="docname"><br><br>
+                    <input id='button' type="submit" value="Set Appointment">
 
-    <p>{{ tagline }}</p>
+                </div>
+                <div id='sess_footer'>
+                    Speedy Sessions
+                </div>
+                
+            </div>
+        
+        </div>
+        
+        </div>
+        
+    </div>
 </div>

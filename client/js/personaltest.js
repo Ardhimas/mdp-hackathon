@@ -146,10 +146,10 @@ function getParticularProvider(provider){
 }
 
 
-//var info = {firstname:'Ronnie', lastname:'Donnie', anyphone:'5128882888', dob:'11/24/1993'}
-//getPatient(info)
+var info = {firstname:'Ronnie', lastname:'Donnie', anyphone:'5128882888', dob:'11/24/1993'}
+getPatient(info)
 //getAppointments(3782)
-getParticularProvider(71)
+// getParticularProvider(71)
 
 function log_error(error) {
 	console.log(error)

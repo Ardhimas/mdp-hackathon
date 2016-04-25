@@ -1,7 +1,21 @@
 // client/js/services/SessionService.js
 // patient sign in and log provider data for average wait/visit time
 /*global angular, api, events*/
-angular.module('SessionService', []).factory('Session', ['$http', function($http) {
+var Athena = require('../athenahealthapi');
+module.exports = function($http){//angular.module('SessionService', []).factory('Session', ['$http', function($http) {
+    
+    
+    function log_error(error) {
+    	console.log(error)
+    	console.log(error.cause)
+    }  
+    var key = 'ywbfpyjnsuef58wdxzpwtfn7'
+    var secret = 'hqmEMUJgRZUTs8r'
+    var version = 'preview1'
+    var practiceid = 195900
+    var departments = []
+    var department_id = 0
+    var api = new Athena.Connection(version, key, secret, practiceid)
     return {
         // call to get all schedulers
         get : function() {
@@ -18,18 +32,20 @@ angular.module('SessionService', []).factory('Session', ['$http', function($http
             return $http.delete('/api/schedulers/' + id);
         },
         //patient info MUST HAVE: lastname, firstname, dob, anyphone
-        getPatientBestMatch: function (api, patient_info) {
-	       api.GET('/patients/bestmatch', {
-	         params: patient_info
-	       }).on('done', function(response){
-	 	     var patientbestmatch = response[0]
-		    // patientlist.forEach(function(item){
-		    //   console.log(item.firstname);	
-		    // });
-		    //return 
-		   return patientbestmatch
-	       }).on('error', function(error){console.log(error)});
-        },
+      //  getPatientBestMatch: function (patient_info, callback) {
+	     //  console.log('before get best match')
+	     //  api.GET('/patients/bestmatch', {
+	     //    params: patient_info
+	     //  }).on('done', function(response){
+	 	   //  var patientbestmatch = response[0]
+		    // // patientbestMatch.forEach(function(item){
+		    // //   console.log(item.firstname);	
+		    // // });
+		    // //return
+		    // console.log(patientbestmatch)
+		    // return callback(patientbestmatch.firstname)
+	     //  }).on('error', function(error){console.log(error)});
+      //  },
         /*get first appointment*/
         getAppointment: function(patient_id, callback) {
 	      var query = {
@@ -79,4 +95,4 @@ angular.module('SessionService', []).factory('Session', ['$http', function($http
        	 })
         }       
     }
-}]);
+}

@@ -2,6 +2,11 @@
 
 <div class="jumbotron text-center">
     <h1>Scheduler</h1>
-
+    <ui-select ng-model="dept.selected" theme="bootstrap" ng-disabled="disabled" style="width: 100%;">
+        <ui-select-match placeholder="Select Department">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="dept in deptList">
+            <small ng-bind-html="dept.name">What</small>
+        </ui-select-choices>
+    </ui-select>
     <p>{{ tagline }}</p>
 </div>

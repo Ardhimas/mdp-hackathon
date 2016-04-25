@@ -1,62 +1,110 @@
 
 // client/js/services/SchedulerService.js
-angular.module('SchedulerService', []).factory('Scheduler', ['$http', function($http) {
+// angular.module('SchedulerService', []).factory('Scheduler', ['$http', function($http) {
+//     /**
+//      * Setting up connection to API
+//     //  */
+//     // var athenahealthapi = require('./js/athenahealthapi')
+//     // // var events = require('events')
+//     var key = 'cjwzdpy9excyntnnt4baqd5z'
+//     var secret = 'ytD5zEadn5HC2ZT'
+//     var version = 'preview1'
+//     var practiceid = 195900
+//     var api = athenahealthapi.Connection(version, key, secret, practiceid)
+//     api.status.on('ready', main)
+//     api.status.on('error', function(error) {
+//     	console.log(error)
+//     })
+// client/js/services/SchedulerService.js
+var Athena = require('../athenahealthapi');
+
+module.exports = function($http){
+// angular.module('SchedulerService', []).factory('Scheduler', ['$http', function($http) {
     /**
      * Setting up connection to API
     //  */
     // var athenahealthapi = require('./js/athenahealthapi')
     // // var events = require('events')
-    var key = 'cjwzdpy9excyntnnt4baqd5z'
-    var secret = 'ytD5zEadn5HC2ZT'
+    
+    // return function($http,$Athena){
+    function log_error(error) {
+    	console.log(error)
+    	console.log(error.cause)
+    }  
+    var key = 'ywbfpyjnsuef58wdxzpwtfn7'
+    var secret = 'hqmEMUJgRZUTs8r'
     var version = 'preview1'
     var practiceid = 195900
-    var api = athenahealthapi.Connection(version, key, secret, practiceid)
-    api.status.on('ready', main)
-    api.status.on('error', function(error) {
-    	console.log(error)
-    })
-    
+    var departmentsList = []
+    var department_id = 0
+    var api = new Athena.Connection(version, key, secret, practiceid)
+    // api.status.on('ready', main)
+    // api.status.on('error', function(error) {
+    // 	console.log(error)
+    // })    
     return {
         // call to get all Departments
         getDepartments : function(callback) {
-            api.GET('/departments', {
-            params: {
-              providerList: false,
-              showalldepartments: false
-            }
-        }).on('done', function(response) {
-                departments = response['departments']
-            	var departmentnames = []
-            	for (i = 0; i < departments.length; ++i) {
-            	    departmentnames.push(departments[i]['patientdepartmentname'])
-            	}
-            	return callback(departmentnames)
-            }).on('error', log_error)
-        },
-        
-        getDepartmentId : function(callback, departmentname) {
-           api.GET('/departments', {
+            console.log("before get departments")
+            // api.GET('/departments', {
+            //     params: {
+            //       providerList: false,
+            //       showalldepartments: false
+            //     }
+            // }).on('done',function(response) {
+            //     departmentsList = response['departments']
+            // 	var departments = []
+            // 	for (var i = 0; i < departmentsList.length; ++i) {
+            // 	    var department = { 'name': departmentsList[i]['patientdepartmentname'],
+            // 	                       'departmentId':  departmentsList[i]['departmentid'] }
+            // 	    departments.push(department)
+            // 	}
+            // 	console.log(departments)
+            // 	callback(departments)
+            // }).on('error', log_error)
+            var promises = [];
+            promises.push(api.GET('/departments', {
                 params: {
                   providerList: false,
                   showalldepartments: false
                 }
-            }).on('done', function(response) {
-                departments = response['departments']
-                for (i = 0; i < departments.length; ++i) {
-                    if (departments[i]['patientdepartmentname'] == departmentname) {
-                        return callback(departments[i]['departmentid'])
-                    }
-                    else {
-                        console.log("Failed")
-                    }
-                }
-            }).on('error', log_error)
+            }))
+            Promise.all(promises).then(function(data){
+                departmentsList = data['departments'];
+                var departments = []
+            	for (var i = 0; i < departmentsList.length; ++i) {
+            	    var department = { 'name': departmentsList[i]['patientdepartmentname'],
+            	                       'departmentId':  departmentsList[i]['departmentid'] }
+            	    departments.push(department)
+            	}
+            	callback(departments)
+            })
         },
+        
+        // getDepartmentId : function(callback, departmentname) {
+        //   api.GET('/departments', {
+        //         params: {
+        //           providerList: false,
+        //           showalldepartments: false
+        //         }
+        //     }).on('done', function(response) {
+        //         departments = response['departments']
+        //         for (i = 0; i < departments.length; ++i) {
+        //             if (departments[i]['patientdepartmentname'] == departmentname) {
+        //                 callback(departments[i]['departmentid'])
+        //             }
+        //             else {
+        //                 console.log("Failed")
+        //             }
+        //         }
+        //     }).on('error', log_error)
+        // },
         
         // call to get all Provider
         getProviders : function(callback, provideTypeInput, showAllProviderIdsInput) {
             var sapi = typeof(showAllProviderIdsInput) !== 'undefined' ?  showAllProviderIdsInput : ''
             var pti = typeof(provideTypeInput) !== 'undefined' ?  provideTypeInput : ''
+            console.log("before call getProviders")
             api.GET('/providers', {
                 params: {
                     provideType: pti,
@@ -68,30 +116,31 @@ angular.module('SchedulerService', []).factory('Scheduler', ['$http', function($
                 for (i = 0; i < providers.length; ++i) {
                     var provider = {firstname: providers[i]['firstname'], 
                                     lastname: providers[i]['lastname'], 
-                                    specialty: providers[i]['specialty']}
+                                    specialty: providers[i]['specialty'], 
+                                    providerId: providers[i]['providerid'] }
                     providernames.push(provider)
                 } 
-                return callback(providernames)
+                callback(providernames)
             }).on('error', log_error)
         },
         
-        getProviderId : function(callback, provider) {
-            api.GET('/providers', {
-                params: {
-                    provideType: '',
-                    showAllProviderIds: ''
-                }
-            }).on('done', function(response) {
-                providers = response['providers']
-                for (i = 0; i < providers.length; ++i) {
-                    if (provider['firstname'] == providers[i]['firstname'] &&
-                        provider['lastname']  == providers[i]['lastname']  &&
-                        provider['specialty'] == providers[i]['specialty']) {
-                        return callback(providers[i]['providerid'])   
-                    }
-                }
-            }).on('error', log_error)
-        },
+        // getProviderId : function(callback, provider) {
+        //     api.GET('/providers', {
+        //         params: {
+        //             provideType: '',
+        //             showAllProviderIds: ''
+        //         }
+        //     }).on('done', function(response) {
+        //         providers = response['providers']
+        //         for (i = 0; i < providers.length; ++i) {
+        //             if (provider['firstname'] == providers[i]['firstname'] &&
+        //                 provider['lastname']  == providers[i]['lastname']  &&
+        //                 provider['specialty'] == providers[i]['specialty']) {
+        //                 return callback(providers[i]['providerid'])   
+        //             }
+        //         }
+        //     }).on('error', log_error)
+        // },
         
         getReasons : function(callback, departmentId, providerId) {
             api.GET('/patientappointmentreasons', {
@@ -103,29 +152,31 @@ angular.module('SchedulerService', []).factory('Scheduler', ['$http', function($
                 reasonsList = response['patientappointmentreasons']
                 reasons = []
                 for (i = 0; i < reasonsList.length; ++i) {
-                    reasons.push(reasonsList[i]['description'])
+                    var reason = {  description: reasonsList[i]['description'], 
+                                    reasonId: reasonsList[i]['reasonid'] }
+                    reasons.push(reason)
                 }
-                return callback(reasons)
+                callback(reasons)
             }).on('error', log_error)
         },
         
-        getReasonId : function(callback, departmentId, providerId, reason) {
-            api.GET('/patientappointmentreasons', {
-                params: {
-                    departmentid: departmentId,
-                    providerid: providerId
-                }
-            }).on('done', function(response) {
-                reasonsList = response['patientappointmentreasons']
-                reasons = []
-                for (i = 0; i < reasonsList.length; ++i) {
-                    if (reason == reasonsList[i]['description']) {
-                        return callback(reasonsList[i]['reasonid'])
-                    }
-                }
-                console.log('failed')
-            }).on('error', log_error)
-        },
+        // getReasonId : function(callback, departmentId, providerId, reason) {
+        //     api.GET('/patientappointmentreasons', {
+        //         params: {
+        //             departmentid: departmentId,
+        //             providerid: providerId
+        //         }
+        //     }).on('done', function(response) {
+        //         reasonsList = response['patientappointmentreasons']
+        //         reasons = []
+        //         for (i = 0; i < reasonsList.length; ++i) {
+        //             if (reason == reasonsList[i]['description']) {
+        //                 return callback(reasonsList[i]['reasonid'])
+        //             }
+        //         }
+        //         console.log('failed')
+        //     }).on('error', log_error)
+        // },
         
         getAppointments : function(callback, departmentId, providerId, reasonId) {
             api.GET('/appointments/open', {
@@ -147,7 +198,7 @@ angular.module('SchedulerService', []).factory('Scheduler', ['$http', function($
                                         appointmentId: appointmentList[i]['appointmentid']}
                     appointments.push(appointment)
                 }
-                return callback(appointments)
+                callback(appointments)
             }).on('error', log_error)
         },
         
@@ -196,5 +247,5 @@ angular.module('SchedulerService', []).factory('Scheduler', ['$http', function($
             return $http.delete('/api/schedulers/' + id);
         }
     }       
-
-}]);
+}
+// }]);

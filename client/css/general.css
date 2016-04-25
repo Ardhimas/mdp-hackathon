@@ -1,6 +1,237 @@
 
-body > div > nav > div > a {
-    
-    background: white;
+body {
+    outline:none;
+    vertical-align: top;
+    font-family: Quicksand, Open Sans, Helvetica, sans-serif;
+}
+
+.logo {
+    text-align: center;
+}
+
+.pre_view {
+    background: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.4), 
+      rgba(0, 0, 0, 0.4)
+    ),
+    url(../img/patients.jpg) no-repeat center center fixed; 
+    height: 20vw;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-style: italic;
+    text-align: center;
+    padding-top: 5.5vw;
+}
+
+.message_A {
+    color: white;
+    font-size: 2.5vw;
+}
+
+#container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     
 }
+
+/* Navigation */
+ul.res_nav {
+    font-size: 1.5vw;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgba(0,152,136,.85);
+}
+
+/* Float side by side */
+ul.res_nav li {
+    float: left;
+    padding: .3vw 1.4vw;
+}
+
+ul.res_nav li:hover {
+    opacity: .5;
+}
+
+/* Style links */
+ul.res_nav li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+/* --------- */
+/* Home.html */
+/* --------- */
+.jumbotron {
+    background: none;
+    text-align: left;
+}
+
+.jumbo_div {
+    width: 100%;
+    background: none;
+}
+
+.left_jumbo_div {
+    text-align: center;
+    font-size: 2vw;
+    width: 100%;
+}
+
+.right_jumbo_div {
+    text-align: right;
+    float: right;
+}
+
+.datefield { 
+    display: inline; 
+    padding: 0.3em; 
+    border: inset 1px #CCC; 
+    background: #FFF; 
+    border-radius: 4px;
+    color: #666;
+}
+
+/* I'm sorry */
+#form_style > label {
+    font-weight: 400;
+}
+
+/* for the dob */
+.datefield * { 
+    display: inline-block;
+}
+
+.datefield input { 
+    width: 2.2em; 
+    padding: 0 0.05em;
+    border: none; 
+    font-size: 100%; 
+    background: none;
+    color: #000;            
+}
+
+.datefield #year { width:2.5em; }
+.datefield input:focus { outline:none; }
+
+/* ------- */
+/* Session */
+/* ------- */
+
+.jumbotron > .session_div {
+    background-color: rgb(0, 204, 153);
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+#sess_style {
+    margin: 0 !important;
+    padding: 0;
+    width: 100% !important;
+    font-size: 1.1vw;
+    color: white;
+    display: inline-block;
+}
+
+#sess_style > label {
+    font-weight: 400;
+}
+
+#button {
+    background-color: rgb(102, 153, 153);
+    border: none;
+    min-width: 10vw;
+}
+
+#button:hover {
+    background-color: rgb(133, 173, 173);
+}
+
+#form_style > label {
+    display: inline-block;
+    float: left;
+    clear: left;
+    padding-right: 1vw;
+}
+
+.session_div {
+    width: 100vw;
+}
+
+#session_sign_in {
+    background-color: rgb(82, 122, 122);
+    float: left;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0vw 3vw;
+    font-size: 1vw;
+    width: 22%;
+}
+
+#session_sign_in > span > img {
+    position: relative;
+    top: 0;
+    padding-top: 3vw;
+}
+
+#session_main_screen {
+    background-color: white;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left:0;
+}
+
+#inline_sess {
+    text-align: center;
+}
+
+#session_screen {
+    width: 78%;
+    color: white;
+    float: right;
+    text-align: center;
+    height: 100vh;
+}
+
+#session_display {
+    background-color: rgba(0,204,153,0.8);
+    height: 100%;
+    top: 50%;
+}
+
+#sess_title {
+    height: 10%;
+}
+
+#sess_content {
+    height: 80%;
+    background-color: white;
+}
+
+#sess_footer {
+    height: 10%;
+}
+
+/* --------- */
+/* Providers */
+/* --------- */
+
+
